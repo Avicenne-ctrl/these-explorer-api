@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargement en cours...</title>
+    <script>
+        function checkStatus() {
+            fetch("/status")
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.updating) {
+                        window.location.href = "/results";  // Rediriger vers la page des résultats
+                    }
+                });
+        }
+
+        setInterval(checkStatus, 5000);  // Vérifier toutes les 5 secondes
+    </script>
+</head>
+<body>
+    <h1>Chargement en cours...</h1>
+    <p>Veuillez patienter pendant que nous mettons à jour la base de données.</p>
+
+    <!-- Affichage du tableau -->
+    <div>
+        {{ df_html | safe }}
+    </div>
+
+    <!-- Optionnel : une barre de progression -->
+    <div class="progress-bar">
+        <div class="progress" style="width: 50%;"></div>
+    </div>
+
+    <style>
+        .progress-bar {
+            width: 100%;
+            background-color: #f3f3f3;
+            margin-top: 20px;
+        }
+        .progress {
+            width: 0;
+            height: 20px;
+            background-color: #4caf50;
+        }
+    </style>
+</body>
+</html>

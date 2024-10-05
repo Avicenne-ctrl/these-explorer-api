@@ -1,0 +1,81 @@
+body {
+    text-align: center; /* Centre le contenu */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #f8f8f8;
+    padding: 10px 0;
+    text-align: left; /* Alignement du titre à gauche */
+    border-bottom: 1px solid #e7e7e7;
+}
+input[type="text"] {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.container {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+select {
+    padding: 10px;
+    margin: 10px;
+}
+
+.container-images {
+    max-width: 100px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 250px);
+    grid-gap: 5px; /* Réduire l'espacement entre les images */
+    justify-content: center; /* Centrer les éléments horizontalement */
+    align-items: center; /* Centrer les éléments verticalement */
+}
+
+.grid-container img {
+    max-width: 400px; /* Ajustez selon vos besoins */
+    max-height: 400px;
+    display: block;
+}
+
+@media screen and (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Style pour le formulaire */
+#search-form {
+    text-align: left; /* Alignement à gauche */
+    margin-left: 20px; /* Marge à gauche pour l'espacement */
+    display: inline-block; /* Pour s'aligner correctement à gauche */
+}
+
+.no-underline {
+    text-decoration: none; /* Supprime le soulignement */
+    color: inherit; /* Conserve la couleur par défaut du texte */
+}
+
+.no-underline:hover {
+    text-decoration: underline; /* Optionnel : Ajoute un soulignement au survol */
+}

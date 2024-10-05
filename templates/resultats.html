@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Résultats</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_resultats.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container-header">
+            <h1><a href = {{ PORT_SERVER}}>Theses Explorer. </a></h1>
+        </div>
+    </header>
+
+    <form id="search-form" method="post" enctype="multipart/form-data">
+        <input type="text" name="user_query" placeholder="Key words request..." required>
+        <input type="text" name="mistral_query" placeholder="Mistral LLM analysis if requiered...">
+        <button type="submit">Chercher</button>
+    </form>
+    <div class="mistral-container">
+        <img src="{{ url_for('static', filename='images/mistral_logo.png') }}" alt="Mistral Logo" class="mistral-logo">
+        <div class = "mistral_answer_class"> {% if mistral_answer %}
+                                        {{ mistral_answer  | safe }}
+                                    {% else %}
+                                        No analysis provided.
+                                    {% endif %} </div>
+    </div>
+
+
+
+    {% for row in data %}
+    <div class="result-container">
+        <div class="title"><a href= {{ row['url_these'] }} target="_blank">Thèse: {{ row['title'] }}</a></div>
+        <div class="detail">Auteur : {{ row['Auteur / Autrice'] }}, Direction : {{ row['Direction'] }}, Discipline : {{ row['Discipline(s)'] }}, Établissement : {{ row['Etablissement(s)'] }}</div>
+        <!-- Résumé condensé et complet -->
+        <div class="detail">
+            <div class="content" id="content-{{ loop.index }}">
+                <span class="condensed">{{ row['content_condensed'] }}</span>
+                <span class="full" style="display:none;">{{ row['content'] }}</span>
+            </div>
+            <span class="show-more" onclick="toggleContent({{ loop.index }})">Afficher plus</span>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+
+    <script>
+        // Fonction pour basculer entre le texte condensé et complet
+        function toggleContent(index) {
+            const contentDiv = document.getElementById('content-' + index);
+            const condensed = contentDiv.querySelector('.condensed');
+            const full = contentDiv.querySelector('.full');
+            const showMore = contentDiv.nextElementSibling;
+
+            if (full.style.display === "none") {
+                condensed.style.display = "none";
+                full.style.display = "inline";
+                showMore.textContent = 'Afficher moins';
+            } else {
+                condensed.style.display = "inline";
+                full.style.display = "none";
+                showMore.textContent = 'Afficher plus';
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+# --- Fichiers de configuration sensibles ---
+# Fichiers contenant des clés API, secrets, mots de passe, etc.
+*.env
+*.secret
+*.key
+*.pem
+*.crt
+secrets.json
+
+# --- Dossiers spécifiques au système d'exploitation ---
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+
+# --- Fichiers et dossiers de logs ---
+*.log
+logs/
+*.log.*
+
+# --- Fichiers et dossiers de cache ---
+*.cache
+.cache/
+*.bak
+*.swp
+*.tmp
+*.temp
+__pycache__/
+*.py[cod]
+
+# --- Virtual Environment ---
+# Environnement virtuel Python
+venv/
+env/
+.venv/
+.env/
+
+# --- Fichiers spécifiques à certains IDE/éditeurs ---
+# PyCharm
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# --- Git ---
+# Exclure les fichiers de stash et les répertoires spécifiques à Git
+.git/
+.gitignore
+!.gitkeep
+
+# --- Historique et index ---
+# Exclure les fichiers d'historique générés par Git ou d'autres outils
+*.history
+*.orig
+*.rej
+*.patch
+
+# --- Fichiers de compilation ---
+*.o
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.class
+
+# --- Images et fichiers multimédia non versionnés ---
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.mp4
+*.mov
+*.avi
+*.mp3
+*.wav
+
+# --- Fichiers compressés et archivés ---
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# --- Autres ---
+node_modules/
+coverage/
+dist/
+build/

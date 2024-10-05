@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theses Explorer.</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_index.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container-header">
+            <h1>Theses Explorer. </h1>
+        </div>
+    </header>
+
+    <!-- Method post pour envoyer les données au serveur flask -->
+    <form id="search-form" method="post" enctype="multipart/form-data">
+        <input type="text" name="user_query" placeholder="Your these subject here..." required>
+        <button type="submit">Search</button>
+    </form>
+
+</body>
+</html>

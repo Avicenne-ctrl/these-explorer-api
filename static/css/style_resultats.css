@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.container-header {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Section principale */
+.result-container {
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+/* Titre de la thèse */
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.title a {
+    text-decoration: none;
+    color: black;
+}
+
+/* Détails de la thèse */
+.detail {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Résumé en texte condensé et texte complet */
+.content {
+    color: #4B0082; /* Violet foncé */
+    font-size: 14px;
+}
+
+/* Lien pour afficher plus ou moins */
+.show-more {
+    color: #007BFF;
+    cursor: pointer;
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+    text-decoration: underline;
+}
+
+/* Formulaire de recherche */
+form {
+    text-align: center;
+    margin-top: 20px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 14px;
+    width: 300px;
+    margin-right: 10px;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.mistral-container {
+    position: relative; /* Permet de positionner le logo à l'intérieur */
+    max-width: 1200px;   /* Limite la largeur du conteneur */
+    margin: 0 auto;     /* Centre horizontalement le conteneur */
+    padding: 20px;      /* Espace autour du texte */
+    text-align: center; /* Centre le texte */
+    border: 1px solid #ddd; /* Optionnel, ajoute une bordure légère */
+    border-radius: 10px;    /* Bordures arrondies */
+    background-color: #f9f9f9; /* Fond légèrement gris */
+}
+
+.mistral_answer_class {
+    font-size: 18px;    /* Taille du texte */
+    color: #333;        /* Couleur du texte */
+}
+
+.mistral-logo {
+    position: absolute;   /* Positionne le logo par rapport au parent */
+    top: 10px;            /* Distance depuis le haut */
+    left: -30px;           /* Distance depuis la gauche */
+    width: 50px;          /* Largeur du logo */
+    height: 50px;         /* Hauteur du logo */
+}
