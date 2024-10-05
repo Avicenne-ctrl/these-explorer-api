@@ -12,7 +12,7 @@ This Flask application allows users to search for theses based on specific queri
 
 
 ### 1. Clone the repository   
-`git clone https://github.com/Avicenne-ctrl/these-scrapping.git`  
+`git clone https://github.com/Avicenne-ctrl/these-explorer-api.git`  
 
 
 ### 2. Install required dependencies  
