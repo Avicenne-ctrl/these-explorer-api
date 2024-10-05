@@ -8,6 +8,8 @@ from selenium.webdriver.chrome.options import Options
 import os
 import scripts.check_utilities as check_utilities
 import configparser
+import tqdm
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Lire le fichier de configuration
 config = configparser.ConfigParser()
@@ -53,7 +55,7 @@ def init_chrome_driver(url_web_site: str, driver_path: Service = driver_path, op
                 
 
         Returns:
-            _type_: 
+            webdriver.Chrome: 
                 the driver initialized
                 
         Raises:
@@ -105,7 +107,7 @@ def get_url_request(query: str):
     model_query += query[-1]
     return PATH_THESES_HEAD + model_query + PATH_THESES_TAIL
 
-def get_parent_div(driver: str):
+def get_parent_div(driver: webdriver.Chrome):
     """
         get the parent div which contain sub div with relevant info
 
@@ -114,17 +116,17 @@ def get_parent_div(driver: str):
                 the google driver to the web site
 
         Returns:
-            selenium object: 
+            selenium.webdriver.remote.webelement.WebElement: 
                 info of the parent balise with child balise
     """
     return WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, BALISE_PARENT)))
     
-def get_link_theses(div: str):
+def get_link_theses(div: webdriver.remote.webelement.WebElement):
     """ 
         In the sub divs get the link to the theses
 
         Args:
-            div (str): 
+            div (selenium.webdriver.remote.webelement.WebElement): 
                 parent div which contain child div of url these
 
         Returns:
@@ -154,6 +156,9 @@ def get_all_url_theses(query: str):
             List[str]: 
                 list of the theses url
                 
+            url_query (str):
+                the url path the the theses.fr website
+                
         Raise:
         -----
             - if the query is not a string
@@ -171,11 +176,11 @@ def get_all_url_theses(query: str):
     
     driver = init_chrome_driver(url_query)
     
-    element    = get_parent_div(driver)
-    child_divs = element.find_elements(By.TAG_NAME, 'div')
+    parent_div    = get_parent_div(driver)
+    child_divs = parent_div.find_elements(By.TAG_NAME, 'div')
     url_theses  = []
     
-    for index, div in enumerate(child_divs):
+    for div in tqdm.tqdm(child_divs):
         url_aux = get_link_theses(div)
         if len(url_aux)>0:
             url_theses += url_aux
@@ -183,6 +188,55 @@ def get_all_url_theses(query: str):
     driver.quit()
             
     return list(set(url_theses)), url_query
+
+def get_all_url_theses_parallelize(query: str):
+    """
+        Combined function to automatically get the these url from the theses.fr website
+
+        Args:
+            url_query (str): 
+                the user request
+
+        Returns:
+            List[str]: 
+                list of the theses url
+                
+            url_query (str):
+                the url path the the theses.fr website
+                
+        Raise:
+        -----
+            - if the query is not a string
+            - if the query is empty or only space
+            
+    """
+    
+    if not isinstance(query, str):
+        raise TypeError(f"Query given is not a string, recieved : {type(query).__name__}")
+    
+    if len(query.split()) == 0:
+        raise TypeError(f"The query is empty")
+    
+    url_query = get_url_request(query) # convert query into url theses query
+    
+    driver = init_chrome_driver(url_query)
+    
+    parent_div    = get_parent_div(driver)
+    child_divs = parent_div.find_elements(By.TAG_NAME, 'div')
+    url_theses  = []
+    
+    # parallelize url extraction
+    with ThreadPoolExecutor(max_workers=50) as executor:
+        futures = [executor.submit(get_link_theses, div) for div in tqdm.tqdm(child_divs)]
+        print("futures")
+        results = []
+        for future in tqdm.tqdm(as_completed(futures)):
+            if len(future.result())>0:
+                results.append(future.result()[0])
+            
+        driver.quit()
+            
+    return list(set(results)), url_query
 
 
 

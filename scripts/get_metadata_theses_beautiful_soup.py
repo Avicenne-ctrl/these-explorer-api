@@ -2,10 +2,11 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
-import scripts.get_url_theses_selenium as get_url_theses_selenium
 import scripts.check_utilities as check_utilities
 import configparser
-
+import lxml
+import tqdm
+from concurrent.futures import ThreadPoolExecutor, as_completed
 # Lire le fichier de configuration
 config = configparser.ConfigParser()
 config.read('./scripts/config.ini')
@@ -36,11 +37,16 @@ def get_metadata_theses_bs(url_these: str):
         --------
             pd.Dataframe: 
                 ddataframe of metadata and associated value
+                
+        Raise:
+        -------
+            - check_utilities.check_correct_url(url_these) : if the url is in the correct format
     """
     check_utilities.check_correct_url(url_these) # url check
     
     response = requests.get(url_these)
-    soup     = BeautifulSoup(response.text, 'html.parser')
+    #soup     = BeautifulSoup(response.text, 'html.parser')
+    soup     = BeautifulSoup(response.text, 'lxml')
 
     if soup:  # Check if the soup object is not None
         # Find the title element, check if it's found, and extract text if present
@@ -65,7 +71,7 @@ def get_metadata_theses_bs(url_these: str):
     
     return None
     
-def get_all_metadata_theses_bs(list_url_these: str):
+def get_all_metadata_theses_bs(list_url_these: list):
     """
         get metadata of theses given a list of url
 
@@ -83,20 +89,65 @@ def get_all_metadata_theses_bs(list_url_these: str):
         --------
             >>> get_title_theses([url_1, url_2, url_3])
             >>> pd.DataFrame()
+            
+        Raise:
+        ------
+            - if the input is not a list
+            
     """
-    check_utilities.check_correct_format(list_url_these, list) # type check
+    
+    if not isinstance(list_url_these, list):
+        raise TypeError(f"The inut must be a list of url link, recieved : {type(list_url_these).__name__}")
     
     metadata = pd.DataFrame()
-    for url in tqdm(list_url_these):  
+    for url in tqdm.tqdm(list_url_these):  
         metadata_aux = get_metadata_theses_bs(url)
-        
-        check_utilities.check_correct_format(metadata_aux, pd.DataFrame) # type check
-        
+                
         if metadata_aux is not None:
             metadata = pd.concat([metadata, metadata_aux])
         
     return metadata.reset_index(drop=True)
 
+def get_all_metadata_theses_bs_parallelized(list_url_these: list):
+    """
+        get metadata of theses given a list of url
+
+        Args:
+        -------
+            list_url_these (List(str)):
+                the url thses list
+
+        Returns:
+        --------
+            pd.DataFrame: 
+                dataframe of metadata which each line correspond to a these
+                
+        Example:
+        --------
+            >>> get_title_theses([url_1, url_2, url_3])
+            >>> pd.DataFrame()
+            
+        Raise:
+        ------
+            - if the input is not a list
+            
+    """
+    
+    if not isinstance(list_url_these, list):
+        raise TypeError(f"The inut must be a list of url link, recieved : {type(list_url_these).__name__}")
+    
+    metadata = pd.DataFrame()
+    
+    
+    # parallelize metadata extraction
+    with ThreadPoolExecutor(max_workers=50) as executor:
+        futures = [executor.submit(get_metadata_theses_bs, url) for url in tqdm.tqdm(list_url_these)]
+        print("futures")
+        for future in tqdm.tqdm(as_completed(futures)):
+            if future.result() is not None:
+                metadata = pd.concat([metadata, future.result()])
+        
+    return metadata.reset_index(drop=True)
     
 
 

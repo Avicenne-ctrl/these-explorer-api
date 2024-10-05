@@ -25,7 +25,7 @@ The application uses a config.ini file to manage file paths and other essential 
 - You need to addapt the google driver in the folder ./GOOGLE_DRIVER, if you have a MacOs, Windows... By default : `DRIVER_PATH_GOOGLE = ./GOOGLE_DRIVER/chromedriver-mac-arm64/chromedriver`  
 - You can also change the mistral model if you want, by default : `MISTRAL_MODEL = mistral-large-latest`
 - same for the embedder, by default : `MODEL_EMBEDDING = all-MiniLM-L6-v2`
-- If you want more result you can modify the number after 'nb=', by default 'nb=10': `PATH_THESES_TAIL = &page=1&nb=10&tri=pertinence&domaine=theses`
+- If you want more result you can modify the number after 'nb=', by default 'nb=100': `PATH_THESES_TAIL = &page=1&nb=10&tri=pertinence&domaine=theses`
 - I advise you not to change the other path in the config.ini
 
 ### 4. Run the app  
@@ -57,3 +57,10 @@ The database will be updating automaticaly
 ## Raises
 - One common raise can be the port of the server if it is already used, you can change it in the ./scripts/config.ini : `PORT_SERVER = 5050`. Usually it's 5000 or 5050.
 - Connection error during url theses scrapping on theses.fr
+
+## Files description
+- get_url_theses_selenium.py :  
+python functions in order to connect to theses.fr and look for theses related to a subject provided. At the end, we have the url for each theses   
+
+- get_metadata_theses_beautiful_soup.py :  
+python functions in order to connect to the url returned by get_url_theses_selenium.py and extract metadata on this theses

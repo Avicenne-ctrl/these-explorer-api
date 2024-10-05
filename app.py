@@ -77,9 +77,17 @@ def resultats():
         if mistral_query and is_token_mistral:
             response_rag = RAG.call_mistral_rag(context=context, prompt= f"quels articles se réfèrent le plus à la requête : '{mistral_query}'")
         
-        return render_template('resultats.html',PORT_SERVER = f"http://127.0.0.1:{PORT_SERVER}", mistral_answer= response_rag, data= df_deep_search.to_dict(orient = "records"))
+        return render_template('resultats.html',
+                               PORT_SERVER                         = f"http://127.0.0.1:{PORT_SERVER}", 
+                               key_word                            = f"Filter : {query}", 
+                               mistral_answer                      = response_rag, 
+                               data= df_deep_search.to_dict(orient = "records"))
         
-    return render_template('resultats.html', PORT_SERVER = f"http://127.0.0.1:{PORT_SERVER}", mistral_answer= response_rag , data= df_output.to_dict(orient = "records"))
+    return render_template('resultats.html', 
+                           PORT_SERVER                    = f"http://127.0.0.1:{PORT_SERVER}",
+                           key_word                       = "No key word provided", 
+                           mistral_answer                 = response_rag, 
+                           data= df_output.to_dict(orient = "records"))
 
 
 

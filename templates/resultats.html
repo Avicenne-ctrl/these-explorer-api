@@ -7,7 +7,7 @@
 <body>
     <header>
         <div class="container-header">
-            <h1><a href = {{ PORT_SERVER}}>Theses Explorer. </a></h1>
+            <h1><a href = {{ PORT_SERVER }}>Theses Explorer. </a></h1>
         </div>
     </header>
 
@@ -16,6 +16,7 @@
         <input type="text" name="mistral_query" placeholder="Mistral LLM analysis if requiered...">
         <button type="submit">Chercher</button>
     </form>
+    <div class = "key_word"> {{ key_word }} </div>
     <div class="mistral-container">
         <img src="{{ url_for('static', filename='images/mistral_logo.png') }}" alt="Mistral Logo" class="mistral-logo">
         <div class = "mistral_answer_class"> {% if mistral_answer %}
