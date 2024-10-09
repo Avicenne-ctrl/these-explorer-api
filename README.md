@@ -3,7 +3,7 @@
 ## Description  
 This Flask application allows users to search for theses based on specific queries. It extracts data from a database and uses advanced analysis techniques to provide the most relevant results. The app is also integrated with Mistral to analyze the context of the results and give feedback based on the provided query.  
 
-![Project Logo](./assets/global_schema.png) 
+![Project Logo](./assets/shema_api.png) 
 
 ## Features  
 - Search for theses by keywords.
