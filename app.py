@@ -36,7 +36,8 @@ def index():
         
         if not utilities_database.query_already_exist(df_theses, url_query):
             print("updating the database because new request")
-            df_theses = utilities_database.update_database(df_theses, query)
+            # can use selenium method of beautiful soup
+            df_theses = utilities_database.update_database_selenium(df_theses, query)
         else:
             print("url query found in excel because request already done")
             

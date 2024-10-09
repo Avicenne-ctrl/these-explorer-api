@@ -56,6 +56,24 @@ The database will be updating automaticaly
 - Loading for the Mistral LLM analysis : 
 ![Project Logo](./assets/second_loading.png)  
 
+
+## Explaining concepts  
+### 1. Search theses subject
+- get the url theses related to a specific subject on theses.fr  
+- read all the url to get the metadata : title, resume, author, school...
+- update the excel file if new request
+- update the vector store if new request
+- display the excel filtered on the url request
+
+### 2. Search with key words  
+- load the vector store
+- call the search function
+- display the 10 more related theses
+
+### 3. Mistral analisys
+- connect to mistral and give the request
+
+
 ## Raises
 - One common raise can be the port of the server if it is already used, you can change it in the ./scripts/config.ini : `PORT_SERVER = 5050`. Usually it's 5000 or 5050.
 - Connection error during url theses scrapping on theses.fr

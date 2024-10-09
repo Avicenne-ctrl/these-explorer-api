@@ -226,7 +226,7 @@ def get_all_url_theses_parallelize(query: str):
     url_theses  = []
     
     # parallelize url extraction
-    with ThreadPoolExecutor(max_workers=50) as executor:
+    with ThreadPoolExecutor(max_workers=30) as executor:
         futures = [executor.submit(get_link_theses, div) for div in tqdm.tqdm(child_divs)]
         print("futures")
         results = []

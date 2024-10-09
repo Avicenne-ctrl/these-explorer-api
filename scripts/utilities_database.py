@@ -6,7 +6,8 @@ sys.path.append('../..')
 sys.path.append('..')
 import scripts.get_vector_store as get_vector_store
 import scripts.get_url_theses_selenium as get_url_theses_selenium
-import scripts.get_metadata_theses_beautiful_soup as get_metadata_theses_beautiful_soup
+import scripts.get_metadata_thesis_bs4 as get_metadata_thesis_bs4
+import scripts.get_metadata_thesis_selenium as get_metadata_thesis_selenium
 from langchain_huggingface import HuggingFaceEmbeddings
 import configparser
 
@@ -128,7 +129,7 @@ def query_already_exist(df, url_query: str):
     return False
 
 
-def update_database(df_theses, query: str):
+def update_database_bs4(df_theses, query: str):
     """Update the database (excle and vector store) if unseen query detescted
 
         Args:
@@ -141,7 +142,32 @@ def update_database(df_theses, query: str):
     
     list_url_theses, main_query_url= get_url_theses_selenium.get_all_url_theses(query) # get all theses url and the url query
     # if new request, we extract only info
-    df_metadata = get_metadata_theses_beautiful_soup.get_all_metadata_theses_bs(list_url_theses) # list of dict with info for each url in the list
+    df_metadata = get_metadata_thesis_bs4.get_all_metadata_theses_bs(list_url_theses) # list of dict with info for each url in the list
+    df_metadata = condense_content_metadata_df(df_metadata)
+    
+    # we update the excel dataset
+    df_theses = update_excel_query_search(df_theses, df_metadata, main_query_url)
+    df_theses.to_excel("./static/excel/df_query.xlsx", index=False)
+    
+    # we update the vector store
+    update_db(df_theses)
+    
+    return df_theses
+
+def update_database_selenium(df_theses, query: str):
+    """Update the database (excle and vector store) if unseen query detescted
+
+        Args:
+            df_theses (pd.Dataframe): 
+                the dataframe with saved query
+                
+            query (str): 
+                the user query
+    """
+    
+    list_url_theses, main_query_url= get_url_theses_selenium.get_all_url_theses(query) # get all theses url and the url query
+    # if new request, we extract only info
+    df_metadata = get_metadata_thesis_selenium.get_all_metadata_thesis(list_url_theses) # list of dict with info for each url in the list
     df_metadata = condense_content_metadata_df(df_metadata)
     
     # we update the excel dataset

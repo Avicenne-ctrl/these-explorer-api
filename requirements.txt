@@ -1,0 +1,13 @@
+pandas
+flask
+mistralai
+numpy
+langchain_community
+selenium
+bs4
+tqdm
+langchain_huggingface
+rank_bm25
+openpyxl
+faiss-cpu
+lxml
