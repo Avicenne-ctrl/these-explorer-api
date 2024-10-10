@@ -122,7 +122,7 @@ def get_metadata_dict(driver_these: str):
         for element in elements:
             try:
                 element_splited      = element.text.split(":")
-                tag                  = element_splited[0]
+                tag                  = element_splited[0].strip()
                 name                 = element_splited[1]
                 dict_metadata[tag]   = name
             except:
