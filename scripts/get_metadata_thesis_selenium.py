@@ -171,6 +171,9 @@ def get_metadata_theses(url_these: str, driver_these: Service):
     except:
         dict_metadata["title"]    = "Missing Value"
         
+    dict_metadata["url_these"]    = url_these
+    
+        
     return pd.DataFrame([dict_metadata])
     
     
