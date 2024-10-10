@@ -90,11 +90,10 @@ def update_db(df, embeddings: HuggingFaceEmbeddings = EMBEDDING):
             - if df not DataFrame
             - if embeddings not HuggingFaceEmbeddings
     """
-    
-    if isinstance(df, pd.DataFrame):
+    if not isinstance(df, pd.DataFrame):
         raise TypeError(f"wrong type, df should be pd.DataFrame, found : {type(df).__name__}")
     
-    if isinstance(embeddings, HuggingFaceEmbeddings):
+    if not isinstance(embeddings, HuggingFaceEmbeddings):
         raise TypeError(f"wrong type, embeddings should be HuggingFaceEmbeddings, found : {type(embeddings).__name__}")
     
     

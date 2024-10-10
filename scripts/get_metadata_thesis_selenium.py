@@ -161,14 +161,14 @@ def get_metadata_theses(url_these: str, driver_these: Service):
     content       = get_tag_metadata(driver_these, TAG_PARENT_THESE_RESUME, TAG_RESUME)
     title         = get_tag_metadata(driver_these, TAG_PARENT_THESE_TITLE, TAG_TITLE)
     
-    if content:
+    try: # avoid crash if bad connection
         dict_metadata["content"]  = content.text 
-    else:
+    except:
         dict_metadata["content"]  =  "Missing Value"
         
-    if title:
+    try: # avoid crash if bad connection
         dict_metadata["title"]    = title.text
-    else:
+    except:
         dict_metadata["title"]    = "Missing Value"
         
     return pd.DataFrame([dict_metadata])

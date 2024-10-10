@@ -51,7 +51,7 @@ def get_len_key_dict(dico: dict)->List[int]:
         - if the dict is empty
         
     """
-    if isinstance(dico, dict):
+    if not isinstance(dico, dict):
         raise TypeError(f"wrong type object, expected dict, got : {type(dico).__name__}")
     
     if len(dico.keys()) == 0:
@@ -91,7 +91,7 @@ def create_document_paragraphs(paragraphs: Dict[str, list]):
                         ]
     """
     
-    if isinstance(paragraphs, dict):
+    if not isinstance(paragraphs, dict):
         raise TypeError(f"wrong type object, expected dict, got : {type(paragraphs).__name__}")
     
     list_length_value_key = get_len_key_dict(paragraphs)
@@ -248,7 +248,7 @@ def create_list_metadata(metadata_dict: dict):
             >>> list_dict_metadata = [{"id": id0, "label": "label0"}, {"id": id1, "label": "label1"}, {"id": id2, "label": "label2"}]
     """
     
-    if isinstance(metadata_dict, dict):
+    if not isinstance(metadata_dict, dict):
         raise TypeError(f"wrong type object, expected dict, got : {type(metadata_dict).__name__}")
     
     list_length_value_key = get_len_key_dict(metadata_dict)
