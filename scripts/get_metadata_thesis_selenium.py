@@ -8,21 +8,22 @@ from selenium.webdriver.chrome.options import Options
 import configparser
 import tqdm
 
-# Lire le fichier de configuration
+# Read config.ini
 config = configparser.ConfigParser()
 config.read('./scripts/config.ini')
 
+# import config var
 DRIVER_PATH_GOOGLE = config["DRIVER"]["DRIVER_PATH_GOOGLE"]
 
+# TAG name for metadata extraction
+TAG_PARENT_THESE_TITLE     = 'div[data-v-d290f8ce]'
+TAG_TITLE                  = "h1[data-v-d290f8ce]"
+TAG_PARENT_THESE_RESUME    = 'div[data-v-35e8592d]'
+TAG_RESUME                 = "p[data-v-35e8592d]"
+TAG_PARENT_METADATA        = "div[data-v-c8bc896e]"
+TAG_METADATA               = "tr[data-v-276fb210]"
 
-
-BALISE_PARENT_THESE_TITLE     = 'div[data-v-d290f8ce]'
-BALISE_TITLE                  = "h1[data-v-d290f8ce]"
-BALISE_PARENT_THESE_RESUME    = 'div[data-v-35e8592d]'
-BALISE_RESUME                 = "p[data-v-35e8592d]"
-BALISE_PARENT_METADATA        = "div[data-v-c8bc896e]"
-BALISE_METADATA               = "tr[data-v-276fb210]"
-
+# init chrome driver
 driver_path = Service(DRIVER_PATH_GOOGLE)
 
 options = Options()
@@ -30,72 +31,82 @@ options.add_argument("--disable-extensions")
 options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
 options.add_argument("--headless")
-#service = Service(driver_path, log_path="chromedriver.log")
 
+# python functiond
 
-
-def get_list_balise_metadata(driver: Service, parent_balise: str, child_balise: str):
+def get_list_tag_metadata(driver: Service, parent_tag: str, child_tag: str):
     """
         get the parent div which contain sub div with relevant info
 
         Args:
-        -------
             driver (str): 
                 the google driver to the web site
                 
-            parent_balise (str):
-                name of the parent div balise : div[name_div_class]
+            parent_tag (str):
+                name of the parent div tag : div[name_div_class]
                 
-            child_balise (str):
-                name of the balise we want to extract info : type_object[name_balise]
+            child_tag (str):
+                name of the tag we want to extract info : type_object[name_tag]
 
         Returns:
-        --------
             selenium object: 
-                list of info for all the child_balise in parent_balise
+                list of info for all the child_tag in parent_tag
                 
+        Raise:
+        -------
+            - check if something has been extract
+            - error du to bad internet connection
+ 
     """
     try:
-        parent_elem = driver.find_element(By.CSS_SELECTOR, parent_balise)
-        child_elem = parent_elem.find_elements(By.CSS_SELECTOR, child_balise)
+        parent_elem = driver.find_element(By.CSS_SELECTOR, parent_tag)
+        child_elem = parent_elem.find_elements(By.CSS_SELECTOR, child_tag)
         return child_elem
     except:
-        print(f"{parent_balise} not found")
+        print(f"{parent_tag} not found")
         return None
 
-def get_balise_metadata(driver: Service, parent_balise: str, child_balise: str):
+def get_tag_metadata(driver: Service, parent_tag: str, child_tag: str):
     """
         get the parent div which contain sub div with relevant info
 
         Args:
-        -------
             driver (str): 
                 the google driver to the web site
                 
-            parent_balise (str):
-                name of the parent div balise : div[name_div_class]
+            parent_tag (str):
+                name of the parent div tag : div[name_div_class]
                 
-            child_balise (str):
-                name of the balise we want to extract info : type_object[name_balise]
+            child_tag (str):
+                name of the tag we want to extract info : type_object[name_tag]
 
         Returns:
-        --------
-            selenium object: 
-                info for the one child_balise in parent_balise
+            selenium object (selenium): 
+                info for the one child_tag in parent_tag
                 
+        Raise:
+        -----
+            - check if something has been extract
+            - error du to bad internet connection     
+               
+        Example:
+            >>> get_tag_metadata(driver_goole, 
+                                    parent_tag = "div[data-v-c8bc896e]", 
+                                    child_tag = "tr[data-v-276fb210]")
+                                    
     """
     try:
-        parent_elem = driver.find_element(By.CSS_SELECTOR, parent_balise)
-        child_elem = parent_elem.find_element(By.CSS_SELECTOR, child_balise)
+        parent_elem = driver.find_element(By.CSS_SELECTOR, parent_tag)
+        child_elem = parent_elem.find_element(By.CSS_SELECTOR, child_tag)
         return child_elem
     except:
-        print(f"{parent_balise} not found")
+        print(f"{parent_tag} not found")
         return None
         
     
     
 def get_metadata_dict(driver_these: str):
-    """_summary_
+    """Gather thesis metadata by reading metadata_tag
 
     Args:
         driver_these (str): _description_
@@ -105,7 +116,7 @@ def get_metadata_dict(driver_these: str):
     """
     dict_metadata = {}
     
-    elements = get_list_balise_metadata(driver_these, BALISE_PARENT_METADATA, BALISE_METADATA)
+    elements = get_list_tag_metadata(driver_these, TAG_PARENT_METADATA, TAG_METADATA)
     
     if elements:
         for element in elements:
@@ -147,8 +158,8 @@ def get_metadata_theses(url_these: str, driver_these: Service):
     dict_metadata = get_metadata_dict(driver_these) 
     
     # get title
-    content       = get_balise_metadata(driver_these, BALISE_PARENT_THESE_RESUME, BALISE_RESUME)
-    title         = get_balise_metadata(driver_these, BALISE_PARENT_THESE_TITLE, BALISE_TITLE)
+    content       = get_tag_metadata(driver_these, TAG_PARENT_THESE_RESUME, TAG_RESUME)
+    title         = get_tag_metadata(driver_these, TAG_PARENT_THESE_TITLE, TAG_TITLE)
     
     if content:
         dict_metadata["content"]  = content.text 

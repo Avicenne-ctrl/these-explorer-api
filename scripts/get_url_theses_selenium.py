@@ -11,33 +11,33 @@ import configparser
 import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# Lire le fichier de configuration
+# Read config.ini
 config = configparser.ConfigParser()
 config.read('./scripts/config.ini')
 
 
-# Set the path to the Chromedriver
+# Import config.ini var
 DRIVER_PATH_GOOGLE = config["DRIVER"]["DRIVER_PATH_GOOGLE"]
 PATH_THESES_HEAD   = config["DRIVER"]["PATH_THESES_HEAD"]
 PATH_THESES_TAIL   = config["DRIVER"]["PATH_THESES_TAIL"]
-BALISE_PARENT      = config["DRIVER"]["BALISE_PARENT"]
-BALISE_HREF        = config["DRIVER"]["BALISE_HREF"]
+TAG_PARENT         = config["DRIVER"]["TAG_PARENT"]
+TAG_HREF           = config["DRIVER"]["TAG_HREF"]
 
-    
+# Check if correct driver path
 if not os.path.exists(DRIVER_PATH_GOOGLE):
     raise TypeError(f"Provided driver_path_goole in ./scripts/config.ini doesn't exist, please download google driver or provide the path")
 if not isinstance(DRIVER_PATH_GOOGLE, str):
     raise TypeError(f"Provided driver_path_goole in ./scripts/config.ini is not in the correct format, expected str got : {type(DRIVER_PATH_GOOGLE).__name__}")
 
-
+# Init chrome driver
 driver_path = Service(DRIVER_PATH_GOOGLE)
-
 options = Options()
 options.add_argument("--disable-extensions")
 options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
 options.add_argument("--headless")
-#service = Service(driver_path, log_path="chromedriver.log")
+
+# python functions
 
 def init_chrome_driver(url_web_site: str, driver_path: Service = driver_path, options: Options = options):
     """
@@ -58,7 +58,7 @@ def init_chrome_driver(url_web_site: str, driver_path: Service = driver_path, op
             webdriver.Chrome: 
                 the driver initialized
                 
-        Raises:
+        Raise:
         ------
             ValueError: 
                 if the url is not correct
@@ -84,12 +84,10 @@ def get_url_request(query: str):
         Given a query, build the correct url to access the theses web site
 
         Args:
-        ------
             query (str): 
                 the user query
 
         Returns:
-        --------
             str: 
                 the correct url
     """
@@ -117,9 +115,9 @@ def get_parent_div(driver: webdriver.Chrome):
 
         Returns:
             selenium.webdriver.remote.webelement.WebElement: 
-                info of the parent balise with child balise
+                info of the parent tag with child tag
     """
-    return WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, BALISE_PARENT)))
+    return WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, TAG_PARENT)))
     
 def get_link_theses(div: webdriver.remote.webelement.WebElement):
     """ 
@@ -135,7 +133,7 @@ def get_link_theses(div: webdriver.remote.webelement.WebElement):
     """
     
     url_theses = []
-    links = div.find_elements(By.CSS_SELECTOR, BALISE_HREF)
+    links = div.find_elements(By.CSS_SELECTOR, TAG_HREF)
         
     # Itérer sur les liens et récupérer l'attribut href
     for link in links:

@@ -10,19 +10,18 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 config = configparser.ConfigParser()
 config.read('./scripts/config.ini')
 
-BALISE_TITLE_THESE_BS         = config["BEAUTIFUL_SOUP"]["BALISE_TITLE_THESE_BS"]
-TYPE_BALISE_TITLE_THESE_BS    = config["BEAUTIFUL_SOUP"]["TYPE_BALISE_TITLE_THESE_BS"]
-BALISE_RESUME_THESE_BS        = config["BEAUTIFUL_SOUP"]["BALISE_RESUME_THESE_BS"]
-TYPE_BALISE_RESUME_THESE_BS   = config["BEAUTIFUL_SOUP"]["TYPE_BALISE_RESUME_THESE_BS"]
-BALISE_METADATA_THESE_BS      = config["BEAUTIFUL_SOUP"]["BALISE_METADATA_THESE_BS"]
-TYPE_BALISE_METADATA_THESE_BS = config["BEAUTIFUL_SOUP"]["TYPE_BALISE_METADATA_THESE_BS"]
+TAG_TITLE_THESE_BS         = config["BEAUTIFUL_SOUP"]["TAG_TITLE_THESE_BS"]
+TYPE_TAG_TITLE_THESE_BS    = config["BEAUTIFUL_SOUP"]["TYPE_TAG_TITLE_THESE_BS"]
+TAG_RESUME_THESE_BS        = config["BEAUTIFUL_SOUP"]["TAG_RESUME_THESE_BS"]
+TYPE_TAG_RESUME_THESE_BS   = config["BEAUTIFUL_SOUP"]["TYPE_TAG_RESUME_THESE_BS"]
+TAG_METADATA_THESE_BS      = config["BEAUTIFUL_SOUP"]["TAG_METADATA_THESE_BS"]
+TYPE_TAG_METADATA_THESE_BS = config["BEAUTIFUL_SOUP"]["TYPE_TAG_METADATA_THESE_BS"]
 
 def get_metadata_theses_bs(url_these: str):
     """
         get the title of a these given its url
 
         Args:
-        -------
             url_these (str):
                 the url thses
                 
@@ -33,7 +32,6 @@ def get_metadata_theses_bs(url_these: str):
                 options for the google driver
 
         Returns:
-        --------
             pd.Dataframe: 
                 ddataframe of metadata and associated value
                 
@@ -49,16 +47,16 @@ def get_metadata_theses_bs(url_these: str):
 
     if soup:  # Check if the soup object is not None
         # Find the title element, check if it's found, and extract text if present
-        title_element = soup.find(TYPE_BALISE_TITLE_THESE_BS, {BALISE_TITLE_THESE_BS: True})
+        title_element = soup.find(TYPE_TAG_TITLE_THESE_BS, {TAG_TITLE_THESE_BS: True})
         title = title_element.text if title_element else "Missing value"
         
         # Find the resume element, check if it's found, and extract text if present
-        resume_element = soup.find(TYPE_BALISE_RESUME_THESE_BS, {BALISE_RESUME_THESE_BS: True})
+        resume_element = soup.find(TYPE_TAG_RESUME_THESE_BS, {TAG_RESUME_THESE_BS: True})
         resume = resume_element.text if resume_element else "Missing value"
         
         # other metadata
         dict_infos = {}
-        for i in soup.find_all(TYPE_BALISE_METADATA_THESE_BS, {BALISE_METADATA_THESE_BS: True}):
+        for i in soup.find_all(TYPE_TAG_METADATA_THESE_BS, {TAG_METADATA_THESE_BS: True}):
             infos = i.text.split(":") if i else "Missing value"
             dict_infos[infos[0].replace("\xa0", "")] = infos[-1].replace("\xa0", "")
         
@@ -75,19 +73,17 @@ def get_all_metadata_theses_bs(list_url_these: list):
         get metadata of theses given a list of url
 
         Args:
-        -------
             list_url_these (List(str)):
                 the url thses list
 
         Returns:
-        --------
             pd.DataFrame: 
                 dataframe of metadata which each line correspond to a these
                 
         Example:
         --------
             >>> get_title_theses([url_1, url_2, url_3])
-            >>> pd.DataFrame()
+        >>> pd.DataFrame()
             
         Raise:
         ------
@@ -112,12 +108,10 @@ def get_all_metadata_theses_bs_parallelized(list_url_these: list):
         get metadata of theses given a list of url
 
         Args:
-        -------
             list_url_these (List(str)):
                 the url thses list
 
         Returns:
-        --------
             pd.DataFrame: 
                 dataframe of metadata which each line correspond to a these
                 

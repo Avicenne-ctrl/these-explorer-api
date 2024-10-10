@@ -11,15 +11,18 @@ import scripts.get_metadata_thesis_selenium as get_metadata_thesis_selenium
 from langchain_huggingface import HuggingFaceEmbeddings
 import configparser
 
-# Lire le fichier de configuration
+# Load config.ini
 config = configparser.ConfigParser()
 config.read('./scripts/config.ini')
 
+# import config var
 MODEL_EMBEDDING   = config["DEFAULT"]["MODEL_EMBEDDING"]
-
-EMBEDDING = HuggingFaceEmbeddings(model_name= MODEL_EMBEDDING)
 COLUMN_URL_QUERY = "url_query"
 
+# load embedding model
+EMBEDDING = HuggingFaceEmbeddings(model_name= MODEL_EMBEDDING)
+
+# python functions
 
 def condense_content(text, num_words=10):
     """Condense the content in order to reduce the space in the html page
@@ -36,7 +39,7 @@ def condense_content(text, num_words=10):
             
         Raise:
         ----
-            - text is nit string
+            - text is not string
             - num_words is not int
     """
     
@@ -72,13 +75,27 @@ def condense_content_metadata_df(df_metadata: pd.DataFrame):
     return df_metadata
 
 
-def update_db(df, embeddings: str = EMBEDDING):
-    """_summary_
+def update_db(df, embeddings: HuggingFaceEmbeddings = EMBEDDING):
+    """update the vector store database
 
-    Args:
-        df (_type_): _description_
-        embeddings (str, optional): _description_. Defaults to EMBEDDING.
+        Args:
+            df (pd.DataFrame): 
+                the updated pd.DataFrame
+                
+            embeddings (HuggingFaceEmbeddings, optional): 
+                str. Defaults to EMBEDDING.
+            
+        Raise:
+        ------
+            - if df not DataFrame
+            - if embeddings not HuggingFaceEmbeddings
     """
+    
+    if isinstance(df, pd.DataFrame):
+        raise TypeError(f"wrong type, df should be pd.DataFrame, found : {type(df).__name__}")
+    
+    if isinstance(embeddings, HuggingFaceEmbeddings):
+        raise TypeError(f"wrong type, embeddings should be HuggingFaceEmbeddings, found : {type(embeddings).__name__}")
     
     
     # add an index:

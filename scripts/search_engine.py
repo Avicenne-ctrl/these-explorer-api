@@ -19,23 +19,21 @@ def get_bm25_similar_paragraphs(query: Union[str, List[str]],
     Get similar paragraphs based on the query using the BM25 model.
 
     Args:
-    ----------
-    query: Union[str, List[str]]
-        The query string to search for.
+        query: Union[str, List[str]]
+            The query string to search for.
 
-    paragraphs: List[str]
-        A list of paragraphs to search within.
+        paragraphs: List[str]
+            A list of paragraphs to search within.
 
-    nb_results: int
-        The number of similar paragraphs to return. Default is 5.
+        nb_results: int
+            The number of similar paragraphs to return. Default is 5.
 
-    sanity_check: bool
-        Whether to check if the test names are in the dictionary. Default is True.
+        sanity_check: bool
+            Whether to check if the test names are in the dictionary. Default is True.
 
     Returns:
-    -------
-    List[Tuple[str, float]]
-        A list of tuples with the matched paragraphs and their similarity scores.
+        List[Tuple[str, float]]
+            A list of tuples with the matched paragraphs and their similarity scores.
 
     Examples:
     --------
@@ -64,33 +62,31 @@ def get_hugging_face_similar_paragraphs(query: Union[str, List[str]],
         Get similar paragraphs based on the query using the HuggingFaceTransformer and
         Faiss as vector stores. Note that we don't need to tokenize sequences
 
-        Parameters:
-        ----------
-        query: Union[str, List[str]]
-            The query string to search for.
+        Args:
+            query: Union[str, List[str]]
+                The query string to search for.
 
-        paragraphs: List[str]
-            A list of paragraphs to search within.
+            paragraphs: List[str]
+                A list of paragraphs to search within.
 
-        name_vector_store: str
-            name of the vector store, either requirement (faiss_index_req_desc) or test description (faiss_index_test_desc)
+            name_vector_store: str
+                name of the vector store, either requirement (faiss_index_req_desc) or test description (faiss_index_test_desc)
 
-        nb_results: int
-            The number of similar paragraphs to return. Default is 5.
+            nb_results: int
+                The number of similar paragraphs to return. Default is 5.
 
-        sanity_check: bool
-            Whether to check if the test names are in the dictionary. Default is True.
+            sanity_check: bool
+                Whether to check if the test names are in the dictionary. Default is True.
 
         Returns:
-        -------
-        List[Tuple[str, float]]
-            A list of tuples with the matched paragraphs and their similarity scores.
+            List[Tuple[str, float]]
+                A list of tuples with the matched paragraphs and their similarity scores.
 
         Examples:
         --------
-        >>> get_hugging_face_similar_paragraphs("This is a test sentence", ["This is a test sentence", "This is another test sentence"], "faiss_index_req_desc",
-                                        nb_results=1)
-        [('This is a test sentence', 0, 1.0)]
+            >>> get_hugging_face_similar_paragraphs("This is a test sentence", ["This is a test sentence", "This is another test sentence"], "faiss_index_req_desc",
+                                            nb_results=1)
+            [Document, Document...]
 
     """
     
